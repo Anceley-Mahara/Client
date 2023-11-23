@@ -1,0 +1,58 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="card card-plain">
+      <div class="card-header">
+        <h4 class="card-title"> Submitted Applications</h4>
+        <h6 class="card-title">Take Note:</h6>
+        <ul class="card-category"> 
+          <li>The length of the application is faster if all required information is provided</li>
+          <li>Kindly certify black and white copies</li>
+          <li>An applicant can only pay the fee after the application has been approved</li>
+          <li>Missing information will prolong the application process</li>
+        </ul>
+      </div>
+      <div class="card-body">
+        <div *ngIf="appMessage; else applicationsTable">
+          <!-- Display appMessage when it's not empty -->
+          <p>{{ appMessage }}</p>
+        </div>
+        <ng-template #applicationsTable>
+        <div class="table-responsive">
+          <table class="table">
+            <thead class=" text-primary">
+              <th>
+                Submission Date
+              </th>
+              <th>
+                Passport No.
+              </th>
+              <th>
+                Name
+              </th>
+              <th>
+                Approved
+              </th>
+              <th>
+                Status
+              </th>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of applications">
+                <ng-container>
+                  <td>{{ item.dateApplied }}</td>
+                  <td>{{ item.passportNumber }}</td>
+                  <td>{{ item.name }}</td>
+                  <td>{{ item.approved }}</td>
+                  <td>{{ item.status }}</td>
+                </ng-container>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </ng-template>
+      </div>
+    </div>
+  </div>
+ 
+</div>
+

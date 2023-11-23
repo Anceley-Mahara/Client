@@ -1,0 +1,96 @@
+<div class="container">
+    <div class="col-md-12">
+        <div class="card card-user">
+            <div class="card-header author">
+                <div class="card-title">STUDY VISA APPLICATION AND PROCESSING | LOGIN</div>
+            </div>
+            <div class="image">
+                <img src="assets/img/damir-bosnjak.jpg" alt="...">
+            </div>
+            <div class="card-body">
+                <div class="author">
+                    <a href="#">
+                        <img class="avatar border-gray" src="//ssl.gstatic.com/accounts/ui/avatar_2x.png" alt="register">
+                    </a>
+                </div>
+                <hr>
+                <form class="center"
+                    *ngIf="!isLoggedIn"
+                    name="form"
+                    (ngSubmit)="f.form.valid && onSubmit()"
+                    #f="ngForm"
+                    novalidate
+                >
+                    <div class="form-group small-input">
+                        <label for="email">Email</label>
+                        <input
+                            type="text"
+                            class="form-control"
+                            name="email"
+                            [(ngModel)]="form.email"
+                            required
+                            #email="ngModel"
+                        />
+                        <div
+                            class="alert alert-danger"
+                            role="alert"
+                            *ngIf="f.submitted && email.invalid"
+                        >
+                            Email is required!
+                        </div>
+                    </div>
+                    <div class="form-group small-input">
+                        <label for="password">Password</label>
+                        <input
+                            type="password"
+                            class="form-control"
+                            name="password"
+                            [(ngModel)]="form.password"
+                            required
+                            minlength="6"
+                            #password="ngModel"
+                        />
+                        <div
+                            class="alert alert-danger"
+                            role="alert"
+                            *ngIf="f.submitted && password.invalid"
+                        >
+                            <div *ngIf="password.errors.required">Password is required</div>
+                            <div *ngIf="password.errors.minlength">
+                                Password must be at least 6 characters
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group small-input">
+                        <button class="btn btn-primary btn-block">
+                            Login
+                        </button>
+                        <small (click)="register()">New Account?<button class="btn button">Register here</button></small>
+                    </div>
+                    <div
+                        class="alert alert-danger small-input"
+                        role="alert"
+                        *ngIf="f.submitted && isLoginFailed"
+                    >
+                        Login failed: {{ errorMessage }}
+                    </div>
+                    <div class="loading-circle small-input" *ngIf="isLoading">
+                        <img src="../../../assets/img/Spinner-2.gif" />
+                    </div>
+                </form>
+                <div class="form-group small-input">
+                  <button (click)="openForgotPasswordModal()" class="btn button">Forgot Password</button>
+                    
+                </div>
+                
+                <div>
+                    <forgot-password
+                        [visible]="showForgotPasswordModal"
+                        (close)="closeForgotPasswordModal()"
+                        (sendResetLink)="sendResetLink($event)"
+                    ></forgot-password>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

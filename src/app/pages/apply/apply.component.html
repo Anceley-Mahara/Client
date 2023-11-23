@@ -1,0 +1,183 @@
+<div class="row">
+    <div class="col-md-12">
+      <div class="card card-user">
+        <div class="card-header">
+          <h5 class="card-title">Apply</h5>
+        </div>
+        <div class="card-body">
+          <form enctype="multipart/form-data" #myForm="ngForm" (ngSubmit)="submitApplication()" method="post">
+          <div class="row">
+            <div class="col-md-3 pr-1">
+              <div class="form-group">
+                <label for="type">Application Type</label>
+                <select id="type" name="type" #applicationTypeSelect class="form-control" required [(ngModel)]="application.applicationType">
+                  <option value="New Application">New Applicant</option>
+                  <option value="Renewal">Renewal</option>
+                </select>
+              </div>
+            </div>
+          </div>
+            <div class="row">
+              <div class="col-md-3 pr-1">
+                <div class="form-group">
+                  <label>First Name</label>
+                  <input type="text" class="form-control" id="name" name="name" required [(ngModel)]="application.name">
+                </div>
+              </div>
+              <div class="col-md-3 px-1">
+                <div class="form-group">
+                  <label>Surname</label>
+                  <input type="text" class="form-control" id="name" name="surname" required [(ngModel)]="application.surname">
+                </div>
+              </div>
+              <div class="col-md-3 pl-1">
+                <div class="form-group">
+                  <label for="date">Date of Birth</label>
+                  <input type="date" class="form-control" id="dateOfBirth" name="dateOfBirth" required [(ngModel)]="application.dateOfBirth">
+                </div>
+              </div>
+              <div class="col-md-3 pl-1">
+                <div class="form-group">
+                  <label for="sex">Sex</label>
+                  <select id="sex" name="sex" class="form-control" required [(ngModel)]="application.sex">
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3 pr-1">
+                  <div class="form-group">
+                    <label>Mobile Number</label>
+                    <input type="tel" class="form-control" id="phone" name="phone" required [(ngModel)]="application.phone">
+                  </div>
+                </div>
+                <div class="col-md-3 pr-1">
+                  <div class="form-group">
+                    <label>Passport Number</label>
+                    <input type="text" class="form-control" id="passportNumber" name="passportNumber" required [(ngModel)]="application.passportNumber">
+                  </div>
+                </div>
+                <div class="col-md-3 px-1">
+                  <div class="form-group">
+                    <label>Issue Date</label>
+                    <input type="date" class="form-control" id="passportIssueDate" name="passportIssueDate" required [(ngModel)]="application.passportIssueDate">
+                  </div>
+                </div>
+                <div class="col-md-3 pl-1">
+                  <div class="form-group">
+                    <label for="date">Expiry Date</label>
+                    <input type="date" class="form-control"  id="passportExpiryDate" name="passportExpiryDate" required [(ngModel)]="application.passportExpiryDate">
+                  </div>
+                </div>
+              </div>
+            <div class="row"> 
+              <div class="col-md-3 pr-1">
+                <div class="form-group">
+                  <label for="sex">Email Address</label>
+                  <input type="email" class="form-control" id="email" name="email" required [(ngModel)]="application.email">
+                </div>
+              </div>
+                <div class="col-md-3 pl-1">
+                  <div class="form-group">
+                    <label for="sex">Nationality</label>
+                    <input type="text" class="form-control" id="nationality" name="nationality" required [(ngModel)]="application.nationality">
+                  </div>
+                </div>
+                <div class="col-md-3 pl-1">
+                  <div class="form-group">
+                    <label for="Year">Year of Study</label>
+                    <input type="number" class="form-control" id="studyYear" min="1" max="10" name="studyYear" required [(ngModel)]="application.studyYear">
+                  </div>
+                </div>
+                <div class="col-md-3 pl-1">
+                  <div class="form-group">
+                    <label for="course">Course Duration<small>(Years)</small></label>
+                    <input type="number" class="form-control" id="duration" min="1" max="10" name="duration" required [(ngModel)]="application.duration">
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6 pr-1">
+                  <div class="form-group">
+                    <label>Name of Institution</label>
+                    <input type="text" class="form-control"  id="institution" name="institution" required [(ngModel)]="application.institution">
+                  </div>
+                </div>
+                <div class="col-md-6 px-1">
+                  <div class="form-group">
+                    <label>Course</label>
+                    <input type="text" class="form-control"  id="course" name="course" required [(ngModel)]="application.course">
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label>Residential Address in Namibia</label>
+                    <input type="text" class="form-control" id="residentialAddress" name="residentialAddress" required [(ngModel)]="application.residentialAddress">
+                  </div>
+                </div>
+              </div>
+            <small>Kindly attach the following documents in pdf format only</small>
+            <br><br>
+            <div class="row">
+              <div class="col-md-4 pr-1">
+                <div>
+                  <label>Original Proof of Registration</label>
+                  <input type="file" id="registrationProofFile"  accept=".pdf" name="registrationProofFile" (change)="onFileSelected($event, 'registrationProofFile')" required>
+                </div>
+              </div>
+            <div class="col-md-4 px-1">
+                <div>
+                  <label>Original Academic Record</label>
+                  <input type="file" id="academicRecordFile"  accept=".pdf" name="academicRecordFile" (change)="onFileSelected($event, 'academicRecordFile')"  [disabled]="applicationTypeSelect?.value === 'New Application'" >
+                </div>
+              </div>
+              <div class="col-md-4 pl-1">
+                <div>
+                  <label>Certified Copy of Passport</label>
+                  <input type="file" id="passportFile"  accept=".pdf" name="passportFile" (change)="onFileSelected($event, 'passportFile')" required>
+                </div>
+              </div>
+            </div>
+          <br>
+            <div class="row"> 
+              <div class="col-md-4 pr-1">
+                <div>
+                  <label>Proof of Residence in Namibia</label>
+                  <input type="file"  accept=".pdf" id="residenceProofFile" name="residenceProofFile" (change)="onFileSelected($event, 'residenceProofFile')" required>
+                </div>
+              </div>
+              <div class="col-md-4 pl-1">
+                <div>
+                  <label>Namibian Police Clearance Certificate</label>
+                  <input type="file" id="criminalRecordNamibiaFile"  accept=".pdf" name="criminalRecordNamibiaFile" (change)="onFileSelected($event, 'criminalRecordNamibiaFile')" required>  
+                </div>
+              </div>
+              <div class="col-md-4 pl-1">
+                <div>
+                  <label>Original Police Clearance Certificate from Country of Origin</label>
+                  <input type="file" id="criminalRecordOriginFile"  accept=".pdf" name="criminalRecordOriginFile" (change)="onFileSelected($event, 'criminalRecordOriginFile')" [disabled]="applicationTypeSelect?.value === 'Renewal'">
+              </div>
+              </div>
+            </div>
+            <br><br>
+            <div class="row">
+               
+            </div>
+            <div class="row">
+              <div class="update ml-auto mr-auto">
+                <div class="loading-circle" *ngIf="isLoading">
+                    <img src="../../../assets/img/Spinner-2.gif" />
+                  </div>
+                <button type="submit" class="btn btn-primary btn-round">Submit</button>
+                </div>
+            </div>
+          </form> 
+        </div>
+      </div>
+    </div>
+  </div>
+  

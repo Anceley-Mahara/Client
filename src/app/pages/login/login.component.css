@@ -1,0 +1,20 @@
+.center {
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin-left: 33%;
+  }
+  
+  .small-input {
+    width: 300px; /* Adjust the width as needed */
+    /* height: 30px; /* Adjust the height as needed */
+    /* font-size: 14px; Adjust the font size as needed */
+  }
+  /* form {
+    
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+  } */
