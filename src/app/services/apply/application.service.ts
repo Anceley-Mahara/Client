@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Application } from '../../models/apply/application';
 
-const baseUrl = 'http://192.168.56.102:3000';
+const baseUrl = ' http://localhost:3000';
 
 
 @Injectable({

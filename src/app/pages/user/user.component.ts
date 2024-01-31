@@ -6,7 +6,6 @@ import { ToastrService } from 'ngx-toastr';
 
 @Component({
     selector: 'user-cmp',
-    moduleId: module.id,
     templateUrl: 'user.component.html'
 })
 

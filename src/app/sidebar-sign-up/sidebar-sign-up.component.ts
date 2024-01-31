@@ -23,7 +23,6 @@ export const ROUTES: RouteInfo[] = [
 ];
 
 @Component({
-    moduleId: module.id,
     selector: 'sidebar-sign-up-cmp',
     templateUrl: 'sidebar-sign-up.component.html',
 })

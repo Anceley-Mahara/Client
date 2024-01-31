@@ -3,7 +3,6 @@ import { ApplicationService } from 'app/services/apply/application.service';
 
 @Component({
     selector: 'dashboard-cmp',
-    moduleId: module.id,
     templateUrl: 'dashboard.component.html'
 })
 

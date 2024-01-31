@@ -4,53 +4,54 @@ import { ToastrService } from "ngx-toastr";
 import { ApplicationService } from 'app/services/apply/application.service';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'apply',
   templateUrl: 'apply.component.html'
 })
 export class ApplyComponent implements OnInit {
-  @ViewChild('myForm') myForm: NgForm; // Add a reference to the form
+  applicationForm: FormGroup;
 
   isLoading = false;
   isExisting = false;
   submittedApplications: any;
 
-  application: Application = {
-    name: '',
-    surname: '',
-    dateOfBirth: '',
-    dateApplied: '',
-    sex: '',
-    passportNumber:'',
-    passportIssueDate:'',
-    passportExpiryDate:'',
-    nationality:'',
-    institution:'',
-    course:'',
-    studyYear: null,
-    duration: null,
-    email:'',
-    phone:'',
-    residentialAddress:'',
-    status: 'New Applicant',
-    approved: 'No',
-    applicationType: '',
-    registrationProofFile: null,
-    academicRecordFile: null,
-    passportFile: null,
-    residenceProofFile: null,
-    criminalRecordNamibiaFile: null,
-    criminalRecordOriginFile: null,
-  };
-
-  constructor(private toastr: ToastrService, private applicationService: ApplicationService, private router: Router) {
-
+  constructor(private fb: FormBuilder, private toastr: ToastrService, private applicationService: ApplicationService, private router: Router) {
+    this.applicationForm = this.fb.group({
+      name: ['', Validators.required],
+      surname: ['', Validators.required],
+      dateOfBirth: ['', Validators.required],
+      dateApplied: [''],
+      sex: ['', Validators.required],
+      passportNumber: ['', Validators.required],
+      passportIssueDate: ['', Validators.required],
+      passportExpiryDate: ['', Validators.required],
+      nationality: ['', Validators.required],
+      institution: ['', Validators.required],
+      course: ['', Validators.required],
+      studyYear: ['', Validators.required],
+      duration: ['', Validators.required],
+      email: ['', Validators.required],
+      phone: ['', Validators.required],
+      residentialAddress: ['', Validators.required],
+      status: ['New Applicant', Validators.required],
+      approved: ['No', Validators.required],
+      applicationType: ['', Validators.required],
+      registrationProofFile: [null, Validators.required],
+      academicRecordFile: [null],
+      passportFile: [null, Validators.required],
+      residenceProofFile: [null, Validators.required],
+      criminalRecordNamibiaFile: [null, Validators.required],
+      criminalRecordOriginFile: [null]
+    });
    }
-   onFileSelected(event: any, fieldName: string) {
-    if (event.target.files.length > 0) {
-      this.application[fieldName] = event.target.files[0];
-      console.log(`${fieldName} selected:`, event.target.files[0]);
+
+   onFileSelected(event: Event, field: string): void {
+    const element = event.currentTarget as HTMLInputElement;
+    let fileList: FileList | null = element.files;
+    if (fileList) {
+      this.applicationForm.patchValue({ [field]: fileList[0] });
     }
   }
 
@@ -58,13 +59,43 @@ export class ApplyComponent implements OnInit {
     this.retrieveApplications();
   }
 
-  submitApplication(): void {
-     if (this.myForm.valid) { // Check if the form is valid
-     
+  onSubmit(): void {
+    console.log(this.applicationForm.value);
+    console.log(this.applicationForm.valid);
+     if (!this.applicationForm.valid) { // Check if the form is valid
+      this.showValidationError();
+    } else{
      // Set the current timestamp when the user submits the application
-     this.application.dateApplied = new Date().toISOString();
+     let appliedDate = new Date().toISOString();
     // Prepare the FormData to send to the server
-    const formData = { ...this.application }; 
+    const formData = new FormData;
+    formData.append('name', this.applicationForm.get('name').value);
+    formData.append('surname', this.applicationForm.get('surname').value);
+    formData.append('dateOfBirth', this.applicationForm.get('dateOfBirth').value);
+    formData.append('dateApplied', appliedDate);
+    formData.append('sex', this.applicationForm.get('sex').value);
+    formData.append('passportNumber', this.applicationForm.get('passportNumber').value);
+    formData.append('passportIssueDate', this.applicationForm.get('passportIssueDate').value);
+    formData.append('passportExpiryDate', this.applicationForm.get('passportExpiryDate').value);
+    formData.append('nationality', this.applicationForm.get('nationality').value);
+    formData.append('institution', this.applicationForm.get('institution').value);
+    formData.append('course', this.applicationForm.get('course').value);
+    formData.append('studyYear', this.applicationForm.get('studyYear').value);
+    formData.append('duration', this.applicationForm.get('duration').value);
+    formData.append('email', this.applicationForm.get('email').value);
+    formData.append('phone', this.applicationForm.get('phone').value);
+    formData.append('residentialAddress', this.applicationForm.get('residentialAddress').value);
+    formData.append('status', this.applicationForm.get('status').value);
+    formData.append('approved', this.applicationForm.get('approved').value);
+    formData.append('applicationType', this.applicationForm.get('applicationType').value);
+
+    formData.append('registrationProofFile', this.applicationForm.get('registrationProofFile').value);
+    formData.append('academicRecordFile', this.applicationForm.get('academicRecordFile').value);
+    formData.append('passportFile', this.applicationForm.get('passportFile').value);
+    formData.append('residenceProofFile', this.applicationForm.get('residenceProofFile').value);
+    formData.append('criminalRecordNamibiaFile', this.applicationForm.get('criminalRecordNamibiaFile').value);
+    formData.append('criminalRecordOriginFile', this.applicationForm.get('criminalRecordOriginFile').value);
+
     if(this.isExisting){
       this.showNotification2('bottom', 'center');
       // Refresh the page
@@ -73,22 +104,18 @@ export class ApplyComponent implements OnInit {
       this.isLoading = true;
     // Send the form data to the server
     this.applicationService.create(formData)
-    .subscribe({
-      next: (res) => {
-        console.log(res);
+    .subscribe(response => {
+        console.log('Registration successful',response);
         this.isLoading = false;
         this.showNotification('top', 'center');
          // After successful submission, clear the form
-         this.myForm.resetForm();
-      },
-      error: (error) => console.error('There is an Error:', error)
+         this.clearForm();
+      }, error =>{
+        console.error('There is an Error:', error);
     });
   };
-  } else{
-     this.showValidationError();
-  }
 }
-
+}
 
   showNotification(from, align) {
     this.toastr.success(
@@ -137,19 +164,54 @@ export class ApplyComponent implements OnInit {
       .subscribe(
         data => {
           this.submittedApplications = data;
-          const existingApp = this.submittedApplications.find(app =>
-            app.passportNumber.toLowerCase() === this.application.passportNumber.toLowerCase() ||
-            app.email === this.application.email
+          this.isExisting = this.checkIfApplicationExists(
+            this.applicationForm.get('passportNumber').value,
+            this.applicationForm.get('email').value
           );
-
-          if (existingApp) {
-            this.isExisting = true;
-          }
 
           console.log(data);
         },
         error => {
-          console.log(error);
+          console.error('Error retrieving applications:', error);
         });
   }
+
+  private checkIfApplicationExists(passportNumber: string, email: string): boolean {
+    const normalizedPassportNumber = passportNumber?.toLowerCase();
+    return this.submittedApplications.some(app =>
+      app.passportNumber?.toLowerCase() === normalizedPassportNumber ||
+      app.email === email
+    );
+  }
+
+  clearForm(): void {
+    this.applicationForm.reset({
+      name:'',
+      surname: '',
+      dateOfBirth: '',
+      dateApplied: '',
+      sex:'',
+      passportNumber:'',
+      passportIssueDate: '',
+      passportExpiryDate: '',
+      nationality: '',
+      institution: '',
+      course: '',
+      studyYear: '',
+      duration: '',
+      email: '',
+      phone: '',
+      residentialAddress: '',
+      status: 'New Applicant', // reset to initial value if needed
+      approved: 'No', // reset to initial value if needed
+      applicationType: '',
+      registrationProofFile: null,
+      academicRecordFile: null,
+      passportFile: null,
+      residenceProofFile: null,
+      criminalRecordNamibiaFile: null,
+      criminalRecordOriginFile: null,
+    });
+  }
+
 }
